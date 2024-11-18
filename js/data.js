@@ -1,50 +1,29 @@
-// Interfaces for Data Model
-
-interface Station {
-  id: string;
-  name: string;
-  address: string;
-  connectorType: string;
-  chargingSpeed: string;
-}
-
-interface Trip {
-  start: string;
-  destination: string;
-  range: number;
-  stations: Station[];
-}
-
+'use strict';
 // Saved Trips Array
-let savedTrips: Trip[] = [];
-
+let savedTrips = [];
 // Save trips to localStorage
-function saveTripsToLocalStorage(): void {
+function saveTripsToLocalStorage() {
   localStorage.setItem('savedTrips', JSON.stringify(savedTrips));
 }
-
 // Load trips from localStorage
-function loadTripsFromLocalStorage(): void {
+function loadTripsFromLocalStorage() {
   const data = localStorage.getItem('savedTrips');
   if (data) {
     savedTrips = JSON.parse(data);
   }
 }
-
 // Save a new trip
-function saveNewTrip(trip: Trip): void {
+function saveNewTrip(trip) {
   savedTrips.push(trip);
   saveTripsToLocalStorage();
 }
-
 // Get all saved trips
-function getSavedTrips(): Trip[] {
+function getSavedTrips() {
   loadTripsFromLocalStorage();
   return savedTrips;
 }
-
 // Example Usage
-const exampleTrip: Trip = {
+const exampleTrip = {
   start: 'Los Angeles, CA',
   destination: 'San Francisco, CA',
   range: 250,
@@ -65,7 +44,6 @@ const exampleTrip: Trip = {
     },
   ],
 };
-
 // Save and retrieve trips for testing
 saveNewTrip(exampleTrip);
 console.log(getSavedTrips());
