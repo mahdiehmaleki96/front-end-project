@@ -1,0 +1,130 @@
+/* General Reset */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7e1e1, #e0f7d1);
+  color: #333;
+}
+
+/* Container Styling */
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* Header Styling */
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+/* Content Styling */
+main.content {
+  display: none;
+}
+
+main.content:not(.hidden) {
+  display: block;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+main.content h2 {
+  font-size: 2rem;
+  color: #673ab7;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+form.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form.form label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+form.form input,
+form.form button {
+  font-size: 1.2rem;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+form.form input {
+  background: #fdfdfd;
+}
+
+form.form button {
+  background: #673ab7;
+  color: white;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  transition: background 0.3s ease;
+}
+
+form.form button:hover {
+  background: #4caf50;
+}
+
+/* Menu Styling */
+footer.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  align-self: center;
+  padding: 15px;
+  background: #4caf50;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 600px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+footer.menu button.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+footer.menu button.menu-item:hover {
+  transform: scale(1.1);
+}
+
+footer.menu button.menu-item span {
+  font-size: 1.5rem;
+}
+
+footer.menu button.active {
+  color: #ffeb3b;
+}

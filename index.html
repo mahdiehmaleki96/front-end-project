@@ -1,20 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJAX Project</title>
-  <link rel="icon" href="images/favicon.ico">
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-  <header>
-  </header>
-  <main>
-  </main>
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EV Trip Planner</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>EV Trip Planner</h1>
+      </header>
+
+      <main class="content" id="home-screen" aria-label="home-screen">
+        <!-- Home Screen -->
+        <h2>Plan Your Trip</h2>
+        <form class="form" id="trip-form">
+          <label for="start">Starting Point:</label>
+          <input type="text" id="start" placeholder="Enter start location" />
+
+          <label for="destination">Destination:</label>
+          <input type="text" id="destination" placeholder="Enter destination" />
+
+          <label for="range">Vehicle Range (miles):</label>
+          <input type="number" id="range" placeholder="Enter range" />
+
+          <button type="submit">Plan My Trip</button>
+        </form>
+      </main>
+
+      <main
+        class="content hidden"
+        id="saved-trips-screen"
+        aria-label="saved-trips-screen">
+        <!-- Saved Trips Screen -->
+        <h2>Saved Trips</h2>
+        <p>No saved trips yet.</p>
+      </main>
+
+      <main
+        class="content hidden"
+        id="settings-screen"
+        aria-label="settings-screen">
+        <!-- Settings Screen -->
+        <h2>Settings</h2>
+        <p>Settings options will be here.</p>
+      </main>
+
+      <footer class="menu">
+        <!-- Bottom Menu -->
+        <button class="menu-item" data-screen="home-screen">
+          <span>🏠</span> Home
+        </button>
+        <button class="menu-item" data-screen="saved-trips-screen">
+          <span>💾</span> Saved
+        </button>
+        <button class="menu-item" data-screen="settings-screen">
+          <span>⚙️</span> Settings
+        </button>
+      </footer>
+    </div>
+
+    <script src="ts/main.js" type="module"></script>
+  </body>
 </html>

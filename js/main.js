@@ -1,10 +1,10 @@
+'use strict';
 // Query elements
 const menuItems = document.querySelectorAll('.menu-item');
 const screens = document.querySelectorAll('main.content');
-const tripForm = document.getElementById('trip-form') as HTMLFormElement;
-
+const tripForm = document.getElementById('trip-form');
 // Function to switch screens
-function switchScreen(targetScreenId: string): void {
+function switchScreen(targetScreenId) {
   screens.forEach((screen) => {
     if (screen.id === targetScreenId) {
       screen.classList.remove('hidden');
@@ -13,7 +13,6 @@ function switchScreen(targetScreenId: string): void {
     }
   });
 }
-
 // Menu item click events
 menuItems.forEach((item) => {
   item.addEventListener('click', () => {
@@ -23,24 +22,18 @@ menuItems.forEach((item) => {
     }
   });
 });
-
 // Handle "Plan My Trip" submission
 tripForm.addEventListener('submit', (event) => {
   event.preventDefault();
-
-  const start = (document.getElementById('start') as HTMLInputElement).value;
-  const destination = (
-    document.getElementById('destination') as HTMLInputElement
-  ).value;
-
+  const start = document.getElementById('start').value;
+  const destination = document.getElementById('destination').value;
   if (start && destination) {
     // Transition to map screen
     generateTripMap(start, destination);
   }
 });
-
 // Mock function for map generation and station preview
-function generateTripMap(start: string, destination: string): void {
+function generateTripMap(start, destination) {
   switchScreen('home-screen'); // Replace this with actual map screen logic
   alert(`Generating map from ${start} to ${destination}`);
 }
