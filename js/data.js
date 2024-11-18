@@ -1,20 +1,19 @@
-/* exported data */
 // Data.ts
 // Mock data for charging stations
-export const stations = [
+export var stations = [
   {
-    name: 'Station 1',
-    address: '123 Main St',
+    name: 'Rapid Charge Station 1',
+    address: '123 Greenway Blvd',
     distance: '2 miles',
   },
   {
-    name: 'Station 2',
-    address: '456 Elm St',
+    name: 'EV Go Hub',
+    address: '456 Power Ave',
     distance: '5 miles',
   },
   {
-    name: 'Station 3',
-    address: '789 Oak St',
-    distance: '10 miles',
+    name: 'Charge+ Station',
+    address: '789 Volt Lane',
+    distance: '8 miles',
   },
 ];
