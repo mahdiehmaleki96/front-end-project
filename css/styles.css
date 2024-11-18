@@ -138,3 +138,41 @@ footer.menu button.menu-item span {
 footer.menu button.active {
   color: #ffeb3b;
 }
+
+/* Form Styling */
+form.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form.form label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+form.form input,
+form.form button {
+  font-size: 1.2rem;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+form.form input {
+  background: #fdfdfd;
+}
+
+form.form button {
+  background: #673ab7;
+  color: white;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  transition: background 0.3s ease;
+}
+
+form.form button:hover {
+  background: #4caf50;
+}
