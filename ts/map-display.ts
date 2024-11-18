@@ -79,4 +79,5 @@ function findEVStationsAlongRoute(): void {
   });
 }
 
-window.initMap = initMap; // This binds the initMap function to the window object for the callback
+// This binds the initMap function to the window object for the callback
+(window as any).initMap = initMap;

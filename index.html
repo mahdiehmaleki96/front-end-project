@@ -40,8 +40,7 @@
         aria-label="map-display-screen">
         <h2>Trip Map</h2>
         <!-- Navigation Map -->
-        <div class="map" id="map"></div>
-
+        <div id="map" style="height: 500px; width: 100%"></div>
         <!-- EV Station List at the Bottom -->
         <section class="station-list">
           <h3>EV Charging Stations Along the Route</h3>
@@ -72,12 +71,13 @@
       </footer>
     </div>
 
-    <script src="ts/main.ts" type="module"></script>
-    <script src="ts/map-display.ts" type="module"></script>
+    <script src="ts/main.js" type="module"></script>
+    <script src="ts/data.js" type="module"></script>
+    <script src="ts/map-display.js" type="module"></script>
 
     <!-- Add Google Maps API script -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu3MF1Zw4FyWA5-mtiATnxDsv9fPEhLgM&amp;libraries=places&amp;callback=initMap"
+      src="https://maps.googleapis.com/maps/api/ts?key=AIzaSyAu3MF1Zw4FyWA5-mtiATnxDsv9fPEhLgM&amp;libraries=places&amp;callback=initMap"
       async
       defer></script>
   </body>
