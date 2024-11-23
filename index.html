@@ -17,7 +17,7 @@
         <h1>EV Trip Planner</h1>
       </header>
 
-      <main class="content hidden" id="home-screen" aria-label="home-screen">
+      <main class="content" id="home-screen" aria-label="home-screen">
         <!-- Home Screen -->
         <h2>Plan Your Trip</h2>
         <form class="form" id="trip-form">
@@ -35,36 +35,30 @@
       </main>
 
       <main
-        class="content"
-        id="map-display-screen"
-        aria-label="map-display-screen">
-        <h2>Trip Map</h2>
-        <!-- Navigation Map -->
-        <div class="map" id="map"></div>
+        class="content hidden"
+        id="saved-trips-screen"
+        aria-label="saved-trips-screen">
+        <!-- Saved Trips Screen -->
+        <h2>Saved Trips</h2>
+        <p>No saved trips yet.</p>
+      </main>
 
-        <!-- EV Station List at the Bottom -->
-        <section class="station-list">
-          <h3>EV Charging Stations Along the Route</h3>
-          <ul id="station-list">
-            <li>
-              <p><strong>Station 1:</strong> ABC Charging Hub - 2 miles</p>
-            </li>
-            <li>
-              <p><strong>Station 2:</strong> QuickCharge - 5 miles</p>
-            </li>
-            <li>
-              <p><strong>Station 3:</strong> PowerUp Station - 8 miles</p>
-            </li>
-          </ul>
-        </section>
+      <main
+        class="content hidden"
+        id="settings-screen"
+        aria-label="settings-screen">
+        <!-- Settings Screen -->
+        <h2>Settings</h2>
+        <p>Settings options will be here.</p>
       </main>
 
       <footer class="menu">
+        <!-- Bottom Menu -->
         <button class="menu-item" data-screen="home-screen">
           <span>🏠</span> Home
         </button>
-        <button class="menu-item" data-screen="map-screen">
-          <span>🗺️</span> Map
+        <button class="menu-item" data-screen="saved-trips-screen">
+          <span>💾</span> Saved
         </button>
         <button class="menu-item" data-screen="settings-screen">
           <span>⚙️</span> Settings
@@ -72,6 +66,12 @@
       </footer>
     </div>
 
-    <script src="ts/main.ts" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/data.js" type="module"></script>
+
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu3MF1Zw4FyWA5-mtiATnxDsv9fPEhLgM&amp;callback=initMap"></script>
   </body>
 </html>
