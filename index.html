@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EV Trip Planner</title>
+    <title>EV Trip Planner - Map Display</title>
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -16,6 +16,25 @@
       <header>
         <h1>EV Trip Planner</h1>
       </header>
+
+      <!-- Error message for validation -->
+      <div id="error-message" style="display: none; color: red"></div>
+
+      <main
+        class="content"
+        id="map-display-screen"
+        aria-label="map-display-screen">
+        <!-- Map Section -->
+        <h2>Trip Details</h2>
+        <div id="map" class="map-container"></div>
+
+        <!-- Stations Info -->
+        <section id="stations-info">
+          <h3>Stations on the Route</h3>
+          <p>Total Stations: <span id="stations-count">0</span></p>
+          <ul id="stations-list"></ul>
+        </section>
+      </main>
 
       <main class="content hidden" id="home-screen" aria-label="home-screen">
         <!-- Home Screen -->
@@ -35,35 +54,30 @@
       </main>
 
       <main
-        class="content"
-        id="map-display-screen"
-        aria-label="map-display-screen">
-        <h2>Trip Map</h2>
-        <!-- Navigation Map -->
-        <div id="map" style="height: 500px; width: 100%"></div>
-        <!-- EV Station List at the Bottom -->
-        <section class="station-list">
-          <h3>EV Charging Stations Along the Route</h3>
-          <ul id="station-list">
-            <li>
-              <p><strong>Station 1:</strong> ABC Charging Hub - 2 miles</p>
-            </li>
-            <li>
-              <p><strong>Station 2:</strong> QuickCharge - 5 miles</p>
-            </li>
-            <li>
-              <p><strong>Station 3:</strong> PowerUp Station - 8 miles</p>
-            </li>
-          </ul>
-        </section>
+        class="content hidden"
+        id="saved-trips-screen"
+        aria-label="saved-trips-screen">
+        <!-- Saved Trips Screen -->
+        <h2>Saved Trips</h2>
+        <p>No saved trips yet.</p>
+      </main>
+
+      <main
+        class="content hidden"
+        id="settings-screen"
+        aria-label="settings-screen">
+        <!-- Settings Screen -->
+        <h2>Settings</h2>
+        <p>Settings options will be here.</p>
       </main>
 
       <footer class="menu">
+        <!-- Bottom Menu -->
         <button class="menu-item" data-screen="home-screen">
           <span>🏠</span> Home
         </button>
-        <button class="menu-item" data-screen="map-screen">
-          <span>🗺️</span> Map
+        <button class="menu-item" data-screen="saved-trips-screen">
+          <span>💾</span> Saved
         </button>
         <button class="menu-item" data-screen="settings-screen">
           <span>⚙️</span> Settings
@@ -71,14 +85,12 @@
       </footer>
     </div>
 
-    <script src="ts/main.js" type="module"></script>
-    <script src="ts/data.js" type="module"></script>
-    <script src="ts/map-display.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/data.js" type="module"></script>
 
-    <!-- Add Google Maps API script -->
     <script
-      src="https://maps.googleapis.com/maps/api/ts?key=AIzaSyAu3MF1Zw4FyWA5-mtiATnxDsv9fPEhLgM&amp;libraries=places&amp;callback=initMap"
       async
-      defer></script>
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&amp;callback=initMap"></script>
   </body>
 </html>
