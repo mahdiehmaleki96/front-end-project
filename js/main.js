@@ -4,12 +4,13 @@ window.initMap = function () {
   console.log('Google Maps initialization logic goes here.');
 };
 // Query elements
-const menuItems = document.querySelectorAll('.menu-item');
-const screens = document.querySelectorAll('main.content');
-const tripForm = document.getElementById('trip-form');
+var menuItems = document.querySelectorAll('.menu-item');
+var screens = document.querySelectorAll('main.content');
+var tripForm = document.getElementById('trip-form');
+var errorMessage = document.getElementById('error-message'); // Error message element
 // Function to switch screens
 function switchScreen(targetScreenId) {
-  screens.forEach((screen) => {
+  screens.forEach(function (screen) {
     if (screen.id === targetScreenId) {
       screen.classList.remove('hidden');
     } else {
@@ -18,50 +19,54 @@ function switchScreen(targetScreenId) {
   });
 }
 // Menu item click events
-menuItems.forEach((item) => {
-  item.addEventListener('click', () => {
-    const targetScreen = item.getAttribute('data-screen');
+menuItems.forEach(function (item) {
+  item.addEventListener('click', function () {
+    var targetScreen = item.getAttribute('data-screen');
     if (targetScreen) {
       switchScreen(targetScreen);
     }
   });
 });
 // Handle "Plan My Trip" form submission
-tripForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+tripForm.addEventListener('submit', function (event) {
+  event.preventDefault(); // Prevent default form submission
   // Retrieve form values
-  const start = document.getElementById('start').value.trim();
-  const destination = document.getElementById('destination').value.trim();
-  const range = parseFloat(document.getElementById('range').value);
+  var start = document.getElementById('start').value.trim();
+  var destination = document.getElementById('destination').value.trim();
+  var range = parseFloat(document.getElementById('range').value);
   // Validate form inputs
   if (!start || !destination || isNaN(range) || range <= 0) {
-    alert('Please enter valid information in all fields.');
-    return;
+    // Show error message and prevent further action
+    errorMessage.textContent = 'Please enter valid information in all fields.';
+    errorMessage.style.display = 'block'; // Show error message
+    return; // Stop further execution
+  } else {
+    // Hide error message if the inputs are valid
+    errorMessage.style.display = 'none'; // Hide error message
   }
   // Transition to map screen if validation passes
   generateTripMap(start, destination, range);
 });
 // Function to generate trip map and display it
 function generateTripMap(start, destination, range) {
-  // Hide the home screen
-  switchScreen('home-screen');
-  // Dynamically create the map screen if it doesn't already exist
-  let mapScreen = document.getElementById('map-screen');
-  if (!mapScreen) {
-    mapScreen = document.createElement('main');
-    mapScreen.classList.add('content');
-    mapScreen.id = 'map-screen';
-    mapScreen.innerHTML = `
-      <h2>Map</h2>
-      <p>Starting Point: ${start}</p>
-      <p>Destination: ${destination}</p>
-      <p>Vehicle Range: ${range} miles</p>
-      <div id="map" style="height: 500px; width: 100%;"></div>
-    `;
-    document.body.appendChild(mapScreen);
-  }
-  // Switch to the map screen
-  switchScreen('map-screen');
+  // Update the existing map section with trip details
+  var mapSection = document.getElementById('map-display-screen');
+  var mapContainer = document.getElementById('map');
+  var stationsInfo = document.getElementById('stations-info');
+  // Display trip details (starting point, destination, range)
+  mapSection.querySelector('h2').textContent = 'Trip Details';
+  mapContainer.innerHTML = ''; // Clear any previous map content
+  // Display the starting point, destination, and vehicle range
+  stationsInfo.innerHTML =
+    '\n    <h3>Stations on the Route</h3>\n    <p>Total Stations: <span id="stations-count">0</span></p>\n    <ul id="stations-list"></ul>\n  ';
+  var tripDetails = document.createElement('p');
+  tripDetails.innerHTML = '\n    Starting Point: '
+    .concat(start, ' <br>\n    Destination: ')
+    .concat(destination, ' <br>\n    Vehicle Range: ')
+    .concat(range, ' miles\n  ');
+  mapContainer.appendChild(tripDetails);
+  // Switch to the map screen (same structure)
+  switchScreen('map-display-screen');
   // Initialize the map (replace with actual Google Maps API logic)
   if (typeof window.initMap === 'function') {
     window.initMap();

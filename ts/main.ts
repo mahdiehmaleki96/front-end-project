@@ -18,6 +18,7 @@ window.initMap = function (): void {
 const menuItems = document.querySelectorAll('.menu-item');
 const screens = document.querySelectorAll('main.content');
 const tripForm = document.getElementById('trip-form') as HTMLFormElement;
+const errorMessage = document.getElementById('error-message') as HTMLElement; // Error message element
 
 // Function to switch screens
 function switchScreen(targetScreenId: string): void {
@@ -42,7 +43,7 @@ menuItems.forEach((item) => {
 
 // Handle "Plan My Trip" form submission
 tripForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+  event.preventDefault(); // Prevent default form submission
 
   // Retrieve form values
   const start = (
@@ -57,8 +58,13 @@ tripForm.addEventListener('submit', (event) => {
 
   // Validate form inputs
   if (!start || !destination || isNaN(range) || range <= 0) {
-    alert('Please enter valid information in all fields.');
-    return;
+    // Show error message and prevent further action
+    errorMessage.textContent = 'Please enter valid information in all fields.';
+    errorMessage.style.display = 'block'; // Show error message
+    return; // Stop further execution
+  } else {
+    // Hide error message if the inputs are valid
+    errorMessage.style.display = 'none'; // Hide error message
   }
 
   // Transition to map screen if validation passes
@@ -71,27 +77,33 @@ function generateTripMap(
   destination: string,
   range: number,
 ): void {
-  // Hide the home screen
-  switchScreen('home-screen');
+  // Update the existing map section with trip details
+  const mapSection = document.getElementById('map-display-screen')!;
+  const mapContainer = document.getElementById('map')!;
+  const stationsInfo = document.getElementById('stations-info')!;
 
-  // Dynamically create the map screen if it doesn't already exist
-  let mapScreen = document.getElementById('map-screen');
-  if (!mapScreen) {
-    mapScreen = document.createElement('main');
-    mapScreen.classList.add('content');
-    mapScreen.id = 'map-screen';
-    mapScreen.innerHTML = `
-      <h2>Map</h2>
-      <p>Starting Point: ${start}</p>
-      <p>Destination: ${destination}</p>
-      <p>Vehicle Range: ${range} miles</p>
-      <div id="map" style="height: 500px; width: 100%;"></div>
-    `;
-    document.body.appendChild(mapScreen);
-  }
+  // Display trip details (starting point, destination, range)
+  mapSection.querySelector('h2')!.textContent = 'Trip Details';
+  mapContainer.innerHTML = ''; // Clear any previous map content
 
-  // Switch to the map screen
-  switchScreen('map-screen');
+  // Display the starting point, destination, and vehicle range
+  stationsInfo.innerHTML = `
+    <h3>Stations on the Route</h3>
+    <p>Total Stations: <span id="stations-count">0</span></p>
+    <ul id="stations-list"></ul>
+  `;
+
+  const tripDetails = document.createElement('p');
+  tripDetails.innerHTML = `
+    Starting Point: ${start} <br>
+    Destination: ${destination} <br>
+    Vehicle Range: ${range} miles
+  `;
+
+  mapContainer.appendChild(tripDetails);
+
+  // Switch to the map screen (same structure)
+  switchScreen('map-display-screen');
 
   // Initialize the map (replace with actual Google Maps API logic)
   if (typeof window.initMap === 'function') {

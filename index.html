@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EV Trip Planner</title>
+    <title>EV Trip Planner - Map Display</title>
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -17,7 +17,26 @@
         <h1>EV Trip Planner</h1>
       </header>
 
-      <main class="content" id="home-screen" aria-label="home-screen">
+      <!-- Error message for validation -->
+      <div id="error-message" style="display: none; color: red"></div>
+
+      <main
+        class="content"
+        id="map-display-screen"
+        aria-label="map-display-screen">
+        <!-- Map Section -->
+        <h2>Trip Details</h2>
+        <div id="map" class="map-container"></div>
+
+        <!-- Stations Info -->
+        <section id="stations-info">
+          <h3>Stations on the Route</h3>
+          <p>Total Stations: <span id="stations-count">0</span></p>
+          <ul id="stations-list"></ul>
+        </section>
+      </main>
+
+      <main class="content hidden" id="home-screen" aria-label="home-screen">
         <!-- Home Screen -->
         <h2>Plan Your Trip</h2>
         <form class="form" id="trip-form">
@@ -72,6 +91,6 @@
     <script
       async
       defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu3MF1Zw4FyWA5-mtiATnxDsv9fPEhLgM&amp;callback=initMap"></script>
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&amp;callback=initMap"></script>
   </body>
 </html>

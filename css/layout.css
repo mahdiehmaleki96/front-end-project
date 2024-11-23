@@ -1,3 +1,5 @@
+/* Layout.css */
+
 /* Container for central alignment */
 .container {
   max-width: 900px;
@@ -8,6 +10,7 @@
   height: 100vh;
 }
 
+/* Styling the content area */
 .content {
   flex: 1;
   display: flex;
@@ -22,7 +25,39 @@
   max-width: 600px;
 }
 
-/* Footer Menu */
+/* Map display styling */
+.map {
+  width: 100%;
+  height: 300px;
+  border: 2px solid #e6e6e6;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Station list styling */
+.station-list {
+  width: 100%;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.station-list h3 {
+  margin-bottom: 15px;
+  color: #6a0dad;
+}
+
+.station-list li {
+  margin: 10px 0;
+  list-style: none;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the footer menu */
 .menu {
   display: flex;
   justify-content: space-around;
@@ -46,13 +81,4 @@
 .menu-item:hover {
   background-color: #dda0dd;
   cursor: pointer;
-}
-
-.menu-item span {
-  font-size: 1.5rem;
-}
-
-/* Hidden Screens */
-.hidden {
-  display: none;
 }
