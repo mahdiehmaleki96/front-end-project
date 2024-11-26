@@ -77,9 +77,6 @@ async function geocodeAddress(address: string): Promise<[number, number]> {
 
 // Simulated charging stations along route
 function getChargingStationsAlongRoute(): Array<{
-/* start: [number, number],
-  end: [number, number],
-  range: number, */
   name: string;
   coordinates: [number, number];
 }> {

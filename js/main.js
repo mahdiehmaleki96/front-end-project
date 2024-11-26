@@ -205,9 +205,6 @@ function geocodeAddress(address) {
 }
 // Simulated charging stations along route
 function getChargingStationsAlongRoute() {
-/*start: [number, number],
-end: [number, number],
-range: number,*/
   // Simulated data
   return [
     { name: 'Station 1', coordinates: [36.7783, -119.4179] },
