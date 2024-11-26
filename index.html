@@ -10,6 +10,10 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin="" />
   </head>
   <body>
     <div class="container">
@@ -17,38 +21,41 @@
         <h1>EV Trip Planner</h1>
       </header>
 
-      <!-- Error message for validation -->
-      <div id="error-message" style="display: none; color: red"></div>
+      <div id="error-message"></div>
 
-      <main
-        class="content"
-        id="map-display-screen"
-        aria-label="map-display-screen">
-        <!-- Map Section -->
+      <main class="content" id="map-screen" aria-label="map-screen">
         <h2>Trip Details</h2>
         <div id="map" class="map-container"></div>
-
-        <!-- Stations Info -->
         <section id="stations-info">
           <h3>Stations on the Route</h3>
           <p>Total Stations: <span id="stations-count">0</span></p>
-          <ul id="stations-list"></ul>
+          <ul id="station-list"></ul>
+          <button id="save-trip-button">Save Trip</button>
         </section>
       </main>
 
       <main class="content hidden" id="home-screen" aria-label="home-screen">
-        <!-- Home Screen -->
         <h2>Plan Your Trip</h2>
         <form class="form" id="trip-form">
           <label for="start">Starting Point:</label>
-          <input type="text" id="start" placeholder="Enter start location" />
-
+          <input
+            type="text"
+            id="start"
+            placeholder="Enter start location"
+            required />
           <label for="destination">Destination:</label>
-          <input type="text" id="destination" placeholder="Enter destination" />
-
+          <input
+            type="text"
+            id="destination"
+            placeholder="Enter destination"
+            required />
           <label for="range">Vehicle Range (miles):</label>
-          <input type="number" id="range" placeholder="Enter range" />
-
+          <input
+            type="number"
+            id="range"
+            placeholder="Enter range"
+            min="1"
+            required />
           <button type="submit">Plan My Trip</button>
         </form>
       </main>
@@ -57,22 +64,27 @@
         class="content hidden"
         id="saved-trips-screen"
         aria-label="saved-trips-screen">
-        <!-- Saved Trips Screen -->
         <h2>Saved Trips</h2>
-        <p>No saved trips yet.</p>
+        <ul id="saved-trips-list"></ul>
       </main>
 
       <main
         class="content hidden"
         id="settings-screen"
         aria-label="settings-screen">
-        <!-- Settings Screen -->
         <h2>Settings</h2>
-        <p>Settings options will be here.</p>
+        <label for="car-info">Car Information:</label>
+        <input type="text" id="car-info" placeholder="Enter car details" />
+        <label for="time-setup">Set Up Time:</label>
+        <input type="time" id="time-setup" />
+        <button id="save-settings">Save</button>
+        <div
+          id="save-message"
+          class="hidden"
+          style="margin-top: 10px; color: green"></div>
       </main>
 
       <footer class="menu">
-        <!-- Bottom Menu -->
         <button class="menu-item" data-screen="home-screen">
           <span>🏠</span> Home
         </button>
@@ -85,12 +97,10 @@
       </footer>
     </div>
 
-    <script src="js/main.js" type="module"></script>
     <script src="js/data.js" type="module"></script>
-
+    <script src="js/main.js" type="module"></script>
     <script
-      async
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&amp;callback=initMap"></script>
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      crossorigin=""></script>
   </body>
 </html>

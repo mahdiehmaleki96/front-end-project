@@ -1,114 +1,254 @@
-// Export an empty object to ensure this file is treated as a module
-export {};
+/// <reference types="leaflet" />
 
-// Declare `initMap` globally to avoid TypeScript errors
-declare global {
-  interface Window {
-    initMap: () => void;
-  }
+// Define saved trips type and array
+interface Trip {
+  start: string;
+  destination: string;
+  range: number;
 }
 
-// Define `initMap` function globally
-window.initMap = function (): void {
-  // Placeholder for Google Maps initialization
-  console.log('Google Maps initialization logic goes here.');
-};
+const savedTrips: Trip[] = [];
 
-// Query elements
-const menuItems = document.querySelectorAll('.menu-item');
-const screens = document.querySelectorAll('main.content');
-const tripForm = document.getElementById('trip-form') as HTMLFormElement;
-const errorMessage = document.getElementById('error-message') as HTMLElement; // Error message element
+// Leaflet map instance
+let map: L.Map;
 
-// Function to switch screens
-function switchScreen(targetScreenId: string): void {
-  screens.forEach((screen) => {
-    if (screen.id === targetScreenId) {
-      screen.classList.remove('hidden');
-    } else {
-      screen.classList.add('hidden');
-    }
-  });
+// Initialize Leaflet Map
+function initMap(): void {
+  map = L.map('map').setView([37.7749, -122.4194], 8); // Centered on San Francisco
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
 }
 
-// Menu item click events
-menuItems.forEach((item) => {
-  item.addEventListener('click', () => {
-    const targetScreen = item.getAttribute('data-screen');
-    if (targetScreen) {
-      switchScreen(targetScreen);
-    }
-  });
+// Call initMap on page load
+document.addEventListener('DOMContentLoaded', () => {
+  initMap();
 });
 
-// Handle "Plan My Trip" form submission
-tripForm.addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent default form submission
+const saveTripButtonError = document.getElementById(
+  'save-trip-button',
+) as HTMLButtonElement;
 
-  // Retrieve form values
+saveTripButtonError.onclick = (): void => {
+  // Show confirmation and update the saved trips display
+  alert('There are no trips found! Go back to the Home Page');
+  renderSavedTrips();
+};
+
+// Add markers for a trip
+function addMarkers(
+  startCoordinates: [number, number],
+  destinationCoordinates: [number, number],
+): void {
+  // Remove existing markers
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Marker) {
+      map.removeLayer(layer);
+    }
+  });
+
+  // Add start and destination markers
+  L.marker(startCoordinates).addTo(map).bindPopup('Start Location').openPopup();
+  L.marker(destinationCoordinates)
+    .addTo(map)
+    .bindPopup('Destination')
+    .openPopup();
+
+  // Fit map to bounds
+  const bounds = L.latLngBounds(startCoordinates, destinationCoordinates);
+  map.fitBounds(bounds);
+}
+
+// Geocoding function
+async function geocodeAddress(address: string): Promise<[number, number]> {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      address,
+    )}`,
+  );
+  const results = await response.json();
+  if (!results || results.length === 0) {
+    throw new Error(`Address not found: ${address}`);
+  }
+  return [parseFloat(results[0].lat), parseFloat(results[0].lon)];
+}
+
+// Simulated charging stations along route
+function getChargingStationsAlongRoute(): Array<{
+/* start: [number, number],
+  end: [number, number],
+  range: number, */
+  name: string;
+  coordinates: [number, number];
+}> {
+  // Simulated data
+  return [
+    { name: 'Station 1', coordinates: [36.7783, -119.4179] },
+    { name: 'Station 2', coordinates: [35.3733, -119.0187] },
+  ];
+}
+
+// Handle trip form submission
+const tripForm = document.getElementById('trip-form') as HTMLFormElement;
+
+tripForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
   const start = (
     document.getElementById('start') as HTMLInputElement
   ).value.trim();
   const destination = (
     document.getElementById('destination') as HTMLInputElement
   ).value.trim();
-  const range = parseFloat(
-    (document.getElementById('range') as HTMLInputElement).value,
-  );
+  const rangeInput = (document.getElementById('range') as HTMLInputElement)
+    .value;
+  const range = parseFloat(rangeInput);
 
-  // Validate form inputs
+  const errorMessage = document.getElementById('error-message')!;
+  errorMessage.textContent = '';
+
   if (!start || !destination || isNaN(range) || range <= 0) {
-    // Show error message and prevent further action
-    errorMessage.textContent = 'Please enter valid information in all fields.';
-    errorMessage.style.display = 'block'; // Show error message
-    return; // Stop further execution
+    console.error('Invalid inputs:', { start, destination, range });
   } else {
-    // Hide error message if the inputs are valid
-    errorMessage.style.display = 'none'; // Hide error message
+    console.log(
+      `Traveling from ${start} to ${destination} within a range of ${range} miles.`,
+    );
   }
 
-  // Transition to map screen if validation passes
-  generateTripMap(start, destination, range);
+  try {
+    const startCoordinates = await geocodeAddress(start);
+    const destinationCoordinates = await geocodeAddress(destination);
+
+    const stations = getChargingStationsAlongRoute();
+
+    addMarkers(startCoordinates, destinationCoordinates);
+    displayStationList(stations);
+
+    // Store the trip data temporarily (do not save yet)
+    const tripData = {
+      start,
+      destination,
+      range,
+      stations,
+      startCoordinates,
+      destinationCoordinates,
+    };
+
+    // Pass trip data to the map screen and display the "Save Trip" button
+    setupSaveTripButton(tripData);
+
+    // Switch screen to show map and navigation
+    switchScreen('map-screen');
+  } catch (error) {
+    errorMessage.textContent = (error as Error).message;
+  }
 });
 
-// Function to generate trip map and display it
-function generateTripMap(
-  start: string,
-  destination: string,
-  range: number,
+function setupSaveTripButton(
+  tripData: Trip & {
+    stations: any[];
+    startCoordinates: [number, number];
+    destinationCoordinates: [number, number];
+  },
 ): void {
-  // Update the existing map section with trip details
-  const mapSection = document.getElementById('map-display-screen')!;
-  const mapContainer = document.getElementById('map')!;
-  const stationsInfo = document.getElementById('stations-info')!;
+  const saveTripButton = document.getElementById(
+    'save-trip-button',
+  ) as HTMLButtonElement;
 
-  // Display trip details (starting point, destination, range)
-  mapSection.querySelector('h2')!.textContent = 'Trip Details';
-  mapContainer.innerHTML = ''; // Clear any previous map content
+  saveTripButton.onclick = (): void => {
+    // Add the trip to saved trips
+    savedTrips.push({
+      start: tripData.start,
+      destination: tripData.destination,
+      range: tripData.range,
+    });
 
-  // Display the starting point, destination, and vehicle range
-  stationsInfo.innerHTML = `
-    <h3>Stations on the Route</h3>
-    <p>Total Stations: <span id="stations-count">0</span></p>
-    <ul id="stations-list"></ul>
-  `;
+    // Show confirmation and update the saved trips display
+    alert('Your trip has been successfully saved!');
+    renderSavedTrips();
+  };
+}
 
-  const tripDetails = document.createElement('p');
-  tripDetails.innerHTML = `
-    Starting Point: ${start} <br>
-    Destination: ${destination} <br>
-    Vehicle Range: ${range} miles
-  `;
+// Render saved trips
+const savedTripsList = document.getElementById('saved-trips-list')!;
+function renderSavedTrips(): void {
+  savedTripsList.innerHTML = savedTrips
+    .map(
+      (trip, index) =>
+        `<li>
+          ${trip.start} to ${trip.destination} (${trip.range} miles)
+          <button onclick="startTrip(${index})">Start Trip</button>
+          <button onclick="deleteTrip(${index})">❌</button>
+        </li>`,
+    )
+    .join('');
+}
 
-  mapContainer.appendChild(tripDetails);
+// Start trip
+(window as any).startTrip = (index: number): void => {
+  const trip = savedTrips[index];
+  alert(`Starting trip: ${trip.start} to ${trip.destination}`);
+  // Switch screen to show map and navigation
+  switchScreen('map-screen');
+};
 
-  // Switch to the map screen (same structure)
-  switchScreen('map-display-screen');
+// Delete trip
+(window as any).deleteTrip = (index: number): void => {
+  savedTrips.splice(index, 1);
+  renderSavedTrips();
+  alert('Oh No!! Trip has been Removed from your list!');
+};
 
-  // Initialize the map (replace with actual Google Maps API logic)
-  if (typeof window.initMap === 'function') {
-    window.initMap();
-  } else {
-    alert('Map functionality not yet implemented.');
-  }
+// Display charging station list
+function displayStationList(
+  stations: Array<{ name: string; coordinates: [number, number] }>,
+): void {
+  const stationList = document.getElementById('station-list')!;
+  stationList.innerHTML = stations
+    .map(
+      (station) =>
+        `<li>
+          <strong>${station.name}</strong>
+          (Lat: ${station.coordinates[0].toFixed(2)}, Lon: ${station.coordinates[1].toFixed(2)})
+        </li>`,
+    )
+    .join('');
+}
+
+// Screen switching logic
+const screens = document.querySelectorAll('main.content');
+function switchScreen(targetScreenId: string): void {
+  screens.forEach((screen) => {
+    screen.classList.toggle('hidden', screen.id !== targetScreenId);
+  });
+}
+
+// Menu logic
+const menuItems = document.querySelectorAll('.menu-item');
+menuItems.forEach((item) =>
+  item.addEventListener('click', () =>
+    switchScreen(item.getAttribute('data-screen')!),
+  ),
+);
+
+// Function to display a success message when saving settings
+function saveSettings(): void {
+  const saveMessage = document.getElementById('save-message')!;
+  saveMessage.textContent = 'You are all set!';
+  saveMessage.classList.remove('hidden');
+
+  // Hide the message after a few seconds
+  setTimeout(() => {
+    saveMessage.classList.add('hidden');
+  }, 3000); // Adjust the timeout duration as needed
+}
+
+// Attach the event listener to the save button
+const saveButton = document.getElementById(
+  'save-settings',
+) as HTMLButtonElement;
+if (saveButton) {
+  saveButton.addEventListener('click', saveSettings);
 }
